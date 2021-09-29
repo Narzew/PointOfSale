@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 describe ScannersController do
-
   describe '[GET] #show' do
     it do
       expect(response).to be_ok
@@ -14,5 +15,4 @@ describe ScannersController do
       expect(response).to be_ok
     end
   end
-
 end
