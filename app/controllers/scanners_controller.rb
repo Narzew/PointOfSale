@@ -1,10 +1,10 @@
+# frozen_string_literal: true
+
 class ScannersController < ApplicationController
-
   skip_before_action :verify_authenticity_token
-  rescue_from ActiveRecord::RecordNotFound, :with => :record_not_found
+  rescue_from ActiveRecord::RecordNotFound, with: :record_not_found
 
-  def show
-  end
+  def show; end
 
   def search
     code = params[:code]
@@ -16,7 +16,6 @@ class ScannersController < ApplicationController
   end
 
   def record_not_found
-    render plain "Record not found."
+    render plain 'Record not found.'
   end
-
 end

@@ -17,13 +17,12 @@
 </div>
 
 <script type="text/javascript">
-
 var code, productName, productPrice, productArray;
 
 function getProductsInfo(productsArray) {
   var s = "";
   productsArray.forEach(function(item, index) {
-      s = s.concat(item['productName'] + " - $" + item['productPrice'] + "<br/>");
+    s = s.concat(item['productName'] + " - $" + item['productPrice'] + "<br/>");
   });
   return s;
 }
@@ -31,7 +30,7 @@ function getProductsInfo(productsArray) {
 function getProductSum(productsArray) {
   var productSum = 0.0;
   productsArray.forEach(function(item, index) {
-      productSum = productSum + parseFloat(item['productPrice']);
+    productSum = productSum + parseFloat(item['productPrice']);
   });
   return productSum.toFixed(2);
 }
@@ -41,33 +40,33 @@ function exitButtonPressed() {
   $(".printer").show();
 }
 
-function scanButtonPressed(){
+function scanButtonPressed() {
   code = $('#searchBox').val();
-          $.ajax({
-              url: '/scanner/search',
-              type: 'POST',
-              data: {
-                  code: code
-              },
-              success: function(r) {
-                  if (r['data'] == null || r['data'] == 'undefined') {
-                      $(".lcd_display").html("Product not found!");
-                  } else {
-                      productName = r['data']['name'];
-                      productPrice = parseFloat(r['data']['price']).toFixed(2);
-                      productsArray.push({
-                          productName,
-                          productPrice
-                      })
-                      $(".lcd_display").html("Scanned product:<br/>" + productName + " - $" + productPrice);
-                      $("#totalSum").html("Total sum: $"+getProductSum(productsArray));
-                      $("#productInfo").html(getProductsInfo(productsArray));
-                  }
-              }
-          });
+  $.ajax({
+    url: '/scanner/search',
+    type: 'POST',
+    data: {
+      code: code
+    },
+    success: function(r) {
+      if (r['data'] == null || r['data'] == 'undefined') {
+        $(".lcd_display").html("Product not found!");
+      } else {
+        productName = r['data']['name'];
+        productPrice = parseFloat(r['data']['price']).toFixed(2);
+        productsArray.push({
+          productName,
+          productPrice
+        })
+        $(".lcd_display").html("Scanned product:<br/>" + productName + " - $" + productPrice);
+        $("#totalSum").html("Total sum: $" + getProductSum(productsArray));
+        $("#productInfo").html(getProductsInfo(productsArray));
+      }
+    }
+  });
 }
 
-$("#button-scan").click(function(){
+$("#button-scan").click(function() {
   scanButtonPressed();
 });
 
@@ -81,12 +80,10 @@ $("document").ready(function() {
   productPrice = 0.0;
   productsArray = [];
   $("#searchBox").unbind('keyup').keyup(function(event) {
-      if (event.keyCode === 13) {
-          scanButtonPressed();
-          return false;
-      }
+    if (event.keyCode === 13) {
+      scanButtonPressed();
+      return false;
+    }
   });
 });
-
-
 </script>
