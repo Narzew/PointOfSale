@@ -1,19 +1,26 @@
 <div class="content-scanner">
   <br/><h2 id="word" style="text-align: center">Barcode Scanner</h2><br/>
   <div class="input-group input-group-lg">
-    <input type="text" id="searchBox" class="form-control" aria-label="Label" aria-describedby="inputGroup-sizing-sm">
+    <input type="text" id="searchBox" class="form-control" aria-label="Label" aria-describedby="inputGroup-sizing-sm"><button type="button" class="btn btn-primary">Scan</button>
+<button type="button" class="btn btn-dark">Exit</button>
   </div><br/><br/>
 </div>
 
-<div class="btn btn-secondary">
-  <%= link_to 'Submit', 'scanners/search', :class => "btn"%>
-  <%= link_to 'Exit', '', :class => "btn"%>
-</div>
-
-<h2> LCD Display
+<h2> LCD Display</h2>
 <div class='lcd_display'></div>
-<h2> Printer
+<h2> Printer</h2>
 <div class='printer'></div>
+
+<script type="text/javascript">
+  function showProductsArray(productsArray){
+    var s = "";
+    productsArray.forEach(function (item, index) {
+      console.log(item, index);
+      s = s.concat(item['productName']+" - $" + item['productPrice']+"<br/>");
+    });
+    return s;
+  }
+</script>
 
 <script type="text/javascript">
     var code = "";
@@ -37,9 +44,9 @@
                         } else {
                           productName = r['data']['name'];
                           productPrice = r['data']['price'];
-                          productsArray.push([productName, productPrice])
+                          productsArray.push({productName, productPrice})
                           $(".lcd_display").html("Scanned product: "+productName);
-                          alert(productsArray);
+                          $(".printer").html(showProductsArray(productsArray));
                         }
                     }
                 });
