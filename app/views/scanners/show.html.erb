@@ -1,0 +1,42 @@
+<div class="content-scanner">
+  <br/><h2 id="word" style="text-align: center">Barcode Scanner</h2><br/>
+  <div class="input-group input-group-lg">
+    <input type="text" id="searchBox" class="form-control" aria-label="Label" aria-describedby="inputGroup-sizing-sm">
+  </div><br/><br/>
+</div>
+
+<div class="btn btn-secondary">
+  <%= link_to 'Submit', 'scanners/search', :class => "btn"%>
+  <%= link_to 'Exit', '', :class => "btn"%>
+</div>
+
+<h2> LCD Display
+<div class='lcd_display'></div>
+<h2> Printer
+<div class='printer'></div>
+
+<script type="text/javascript">
+    var code = "";
+    $("document").ready(function() {
+        $("#searchBox").unbind('keyup').keyup(function(event) {
+            if (event.keyCode === 13) {
+                code = $('#searchBox').val();
+                $.ajax({
+                    url: '/scanner/search',
+                    type: 'POST',
+                    data: {
+                        code: code
+                    },
+                    success: function(r) {
+                        if(r['data'] == null || r['data'] == 'undefined'){
+                          $(".lcd_display").html("Product not found!");
+                        } else {
+                          $(".lcd_display").html("Scanned product: "+r['data']['name']);
+                        }
+                    }
+                });
+                return false;
+            }
+        });
+    });
+</script>
