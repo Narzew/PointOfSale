@@ -2,60 +2,82 @@
   <br/><h2 id="word" style="text-align: center">Barcode Scanner</h2><br/>
   <div class="input-group input-group-lg">
     <input type="text" id="searchBox" class="form-control" aria-label="Label" aria-describedby="inputGroup-sizing-sm"><button type="button" class="btn btn-primary">Scan</button>
-<button type="button" class="btn btn-dark">Exit</button>
+<button id="button-exit" type="button" class="btn btn-dark">Exit</button>
   </div><br/><br/>
 </div>
 
 <h2> LCD Display</h2>
 <div class='lcd_display'></div>
+<hr>
 <h2> Printer</h2>
-<div class='printer'></div>
+<div class='printer' style='display: none'>
+<div id="productInfo"></div>
+--------------------------------------------------------
+<div id="totalSum"></div>
+</div>
 
 <script type="text/javascript">
-  function showProductsArray(productsArray){
-    var s = "";
-    var productSum = 0.0;
-    productsArray.forEach(function (item, index) {
-      console.log(item, index);
-      s = s.concat(item['productName']+" - $" + item['productPrice']+"<br/>");
+
+function getProductsInfo(productsArray) {
+  var s = "";
+  productsArray.forEach(function(item, index) {
+      s = s.concat(item['productName'] + " - $" + item['productPrice'] + "<br/>");
+  });
+  return s;
+}
+
+function getProductSum(productsArray) {
+  var productSum = 0.0;
+  productsArray.forEach(function(item, index) {
       productSum = productSum + parseFloat(item['productPrice']);
-    });
-    s = s.concat("---------------------------------------------------<br/>");
-    s = s.concat("Sum: $"+productSum.toFixed(2))
-    return s;
-  }
-</script>
+  });
+  return productSum.toFixed(2);
+}
 
-<script type="text/javascript">
-    var code = "";
-    let productName = "";
-    let productPrice = 0.0;
-    var productsArray = [];
+function exitButtonPressed() {
+  alert("Exit command");
+  $(".lcd_display").html($("#totalSum").html());
+  $(".printer").show();
+}
 
-    $("document").ready(function() {
-        $("#searchBox").unbind('keyup').keyup(function(event) {
-            if (event.keyCode === 13) {
-                code = $('#searchBox').val();
-                $.ajax({
-                    url: '/scanner/search',
-                    type: 'POST',
-                    data: {
-                        code: code
-                    },
-                    success: function(r) {
-                        if(r['data'] == null || r['data'] == 'undefined'){
-                          $(".lcd_display").html("Product not found!");
-                        } else {
-                          productName = r['data']['name'];
-                          productPrice = parseFloat(r['data']['price']).toFixed(2);
-                          productsArray.push({productName, productPrice})
-                          $(".lcd_display").html("Scanned product: "+productName);
-                          $(".printer").html(showProductsArray(productsArray));
-                        }
-                    }
-                });
-                return false;
-            }
-        });
-    });
+$("#button-exit").click(function() {
+  exitButtonPressed();
+});
+
+$("document").ready(function() {
+  var code = "";
+  let productName = "";
+  let productPrice = 0.0;
+  var productsArray = [];
+  $("#searchBox").unbind('keyup').keyup(function(event) {
+      if (event.keyCode === 13) {
+          code = $('#searchBox').val();
+          $.ajax({
+              url: '/scanner/search',
+              type: 'POST',
+              data: {
+                  code: code
+              },
+              success: function(r) {
+                  if (r['data'] == null || r['data'] == 'undefined') {
+                      $(".lcd_display").html("Product not found!");
+                  } else {
+                      productName = r['data']['name'];
+                      productPrice = parseFloat(r['data']['price']).toFixed(2);
+                      productsArray.push({
+                          productName,
+                          productPrice
+                      })
+                      $(".lcd_display").html("Scanned product:<br/>" + productName + " - $" + productPrice);
+                      $("#totalSum").html("Total sum: $"+getProductSum(productsArray));
+                      $("#productInfo").html(getProductsInfo(productsArray));
+                  }
+              }
+          });
+          return false;
+      }
+  });
+});
+
+
 </script>
