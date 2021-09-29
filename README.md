@@ -1,24 +1,28 @@
-# README
+# Barcode scanner
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
 
-Things you may want to cover:
+## Run instructions:
+1) install Ruby 3.0.2 and bundler on your local machine.
+2) clone the project
+3) open the config/database.yml and enter your database data. I used postgresql for example
+4) go into the app folder and type following commands in the terminal. Make sure every command succeed before continuing.
+5)     rake db:drop db:create db:migrate db:seed
+6)     bundle install
+7)     rails webpacker:install
+8)     rails s
 
-* Ruby version
+Now you should have two endpoints ready.
 
-* System dependencies
+## Endpoints
+    GET localhost:3000/scanner --> Main scanner app
+    GET localhost:3000/products --> Product list manager
 
-* Configuration
+## AJAX endpoints:
+    POST localhost:3000/search --> Used by AJAX queries to search for given barcode and return product details
 
-* Database creation
+## How the application works
 
-* Database initialization
+You have to enter the valid barcode in the numerical format in the text field.
+If the product exist, the product will be scanned and added to the list. When you finish scanning your products, click "Exit" button to show final details.
 
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+You can get the product codes by using the localhost:3000/products endpoint.
