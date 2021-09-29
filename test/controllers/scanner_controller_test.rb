@@ -2,7 +2,7 @@
 
 require 'test_helper'
 
-class ProductTest < ActiveSupport::TestCase
+class ScannerControllerTest < ActionDispatch::IntegrationTest
   # test "the truth" do
   #   assert true
   # end

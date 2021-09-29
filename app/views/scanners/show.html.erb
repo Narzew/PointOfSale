@@ -1,0 +1,91 @@
+<div class="content-scanner">
+  <br/><h2 id="word" style="text-align: center">Barcode Scanner</h2><br/>
+  <div class="input-group input-group-lg">
+    <input type="text" id="searchBox" class="form-control" aria-label="Label" aria-describedby="inputGroup-sizing-sm"><button type="button" id="button-scan" class="btn btn-primary">Scan</button>
+<button id="button-exit" type="button" class="btn btn-dark">Exit</button>
+  </div><br/><br/>
+</div>
+
+<h2> LCD Display</h2>
+<div class='lcd_display'></div>
+<hr>
+<h2> Printer</h2>
+<div class='printer' style='display: none'>
+<div id="productInfo"></div>
+--------------------------------------------------------
+<div id="totalSum"></div>
+</div>
+
+<script type="text/javascript">
+var code, productName, productPrice, productArray;
+
+function getProductsInfo(productsArray) {
+  var s = "";
+  productsArray.forEach(function(item, index) {
+    s = s.concat(item['productName'] + ": $" + item['productPrice'] + "<br/>");
+  });
+  return s;
+}
+
+function getProductSum(productsArray) {
+  var productSum = 0.0;
+  productsArray.forEach(function(item, index) {
+    productSum = productSum + parseFloat(item['productPrice']);
+  });
+  return productSum.toFixed(2);
+}
+
+function exitButtonPressed() {
+  if($("#totalSum").html() != ""){
+    $(".lcd_display").html($("#totalSum").html());
+    $(".printer").show();
+  }
+}
+
+function scanButtonPressed() {
+  code = $('#searchBox').val();
+  $.ajax({
+    url: '/scanner/search',
+    type: 'POST',
+    data: {
+      code: code
+    },
+    success: function(r) {
+      if (r['data'] == null || r['data'] == 'undefined') {
+        $(".lcd_display").html("Product not found!");
+      } else {
+        productName = r['data']['name'];
+        productPrice = parseFloat(r['data']['price']).toFixed(2);
+        productsArray.push({
+          productName,
+          productPrice
+        })
+        $(".lcd_display").html("Scanned product:<br/>" + productName + " - $" + productPrice);
+        $("#totalSum").html("Total sum: $" + getProductSum(productsArray));
+        $("#productInfo").html(getProductsInfo(productsArray));
+      }
+    }
+  });
+}
+
+$("#button-scan").click(function() {
+  scanButtonPressed();
+});
+
+$("#button-exit").click(function() {
+  exitButtonPressed();
+});
+
+$("document").ready(function() {
+  code = "";
+  productName = "";
+  productPrice = 0.0;
+  productsArray = [];
+  $("#searchBox").unbind('keyup').keyup(function(event) {
+    if (event.keyCode === 13) {
+      scanButtonPressed();
+      return false;
+    }
+  });
+});
+</script>
