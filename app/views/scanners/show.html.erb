@@ -22,7 +22,7 @@ var code, productName, productPrice, productArray;
 function getProductsInfo(productsArray) {
   var s = "";
   productsArray.forEach(function(item, index) {
-    s = s.concat(item['productName'] + " - $" + item['productPrice'] + "<br/>");
+    s = s.concat(item['productName'] + ": $" + item['productPrice'] + "<br/>");
   });
   return s;
 }
@@ -36,8 +36,10 @@ function getProductSum(productsArray) {
 }
 
 function exitButtonPressed() {
-  $(".lcd_display").html($("#totalSum").html());
-  $(".printer").show();
+  if($("#totalSum").html() != ""){
+    $(".lcd_display").html($("#totalSum").html());
+    $(".printer").show();
+  }
 }
 
 function scanButtonPressed() {

@@ -8,6 +8,6 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-10.times do
+50.times do
   Product.create(name: Faker::Food.ingredient, code: Faker::Barcode.ean(13), price: rand(0.01..100.0).round(2))
 end
