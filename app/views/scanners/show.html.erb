@@ -17,6 +17,10 @@
 
 <script type="text/javascript">
     var code = "";
+    let productName = "";
+    let productPrice = 0.0;
+    var productsArray = [];
+
     $("document").ready(function() {
         $("#searchBox").unbind('keyup').keyup(function(event) {
             if (event.keyCode === 13) {
@@ -31,7 +35,11 @@
                         if(r['data'] == null || r['data'] == 'undefined'){
                           $(".lcd_display").html("Product not found!");
                         } else {
-                          $(".lcd_display").html("Scanned product: "+r['data']['name']);
+                          productName = r['data']['name'];
+                          productPrice = r['data']['price'];
+                          productsArray.push([productName, productPrice])
+                          $(".lcd_display").html("Scanned product: "+productName);
+                          alert(productsArray);
                         }
                     }
                 });
