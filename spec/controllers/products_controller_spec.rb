@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 describe ProductsController do
-
   describe '[GET] #index' do
     before do
       create_list(:product, 10)

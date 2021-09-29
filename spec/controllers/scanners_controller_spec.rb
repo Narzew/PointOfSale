@@ -2,7 +2,6 @@
 
 require 'rails_helper'
 describe ScannersController do
-
   describe '[GET] #show' do
     it do
       expect(response).to be_ok
