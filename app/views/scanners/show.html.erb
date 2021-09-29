@@ -1,7 +1,7 @@
 <div class="content-scanner">
   <br/><h2 id="word" style="text-align: center">Barcode Scanner</h2><br/>
   <div class="input-group input-group-lg">
-    <input type="text" id="searchBox" class="form-control" aria-label="Label" aria-describedby="inputGroup-sizing-sm"><button type="button" class="btn btn-primary">Scan</button>
+    <input type="text" id="searchBox" class="form-control" aria-label="Label" aria-describedby="inputGroup-sizing-sm"><button type="button" id="button-scan" class="btn btn-primary">Scan</button>
 <button id="button-exit" type="button" class="btn btn-dark">Exit</button>
   </div><br/><br/>
 </div>
@@ -17,6 +17,8 @@
 </div>
 
 <script type="text/javascript">
+
+var code, productName, productPrice, productArray;
 
 function getProductsInfo(productsArray) {
   var s = "";
@@ -35,23 +37,12 @@ function getProductSum(productsArray) {
 }
 
 function exitButtonPressed() {
-  alert("Exit command");
   $(".lcd_display").html($("#totalSum").html());
   $(".printer").show();
 }
 
-$("#button-exit").click(function() {
-  exitButtonPressed();
-});
-
-$("document").ready(function() {
-  var code = "";
-  let productName = "";
-  let productPrice = 0.0;
-  var productsArray = [];
-  $("#searchBox").unbind('keyup').keyup(function(event) {
-      if (event.keyCode === 13) {
-          code = $('#searchBox').val();
+function scanButtonPressed(){
+  code = $('#searchBox').val();
           $.ajax({
               url: '/scanner/search',
               type: 'POST',
@@ -74,6 +65,24 @@ $("document").ready(function() {
                   }
               }
           });
+}
+
+$("#button-scan").click(function(){
+  scanButtonPressed();
+});
+
+$("#button-exit").click(function() {
+  exitButtonPressed();
+});
+
+$("document").ready(function() {
+  code = "";
+  productName = "";
+  productPrice = 0.0;
+  productsArray = [];
+  $("#searchBox").unbind('keyup').keyup(function(event) {
+      if (event.keyCode === 13) {
+          scanButtonPressed();
           return false;
       }
   });
