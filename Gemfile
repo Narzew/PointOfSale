@@ -27,8 +27,9 @@ gem 'jbuilder', '~> 2.7'
 # Use Active Storage variant
 # gem 'image_processing', '~> 1.2'
 
+gem 'factory_bot'
 gem 'faker'
-gem 'rspec'
+gem 'rspec-rails'
 gem 'rubocop'
 gem 'simple_form'
 
