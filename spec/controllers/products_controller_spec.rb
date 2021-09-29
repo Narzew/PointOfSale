@@ -1,4 +1,4 @@
-require 'rails_helper'
+# frozen_string_literal: true
 
 describe ProductsController do
 
@@ -12,5 +12,4 @@ describe ProductsController do
       expect(response).to render_template(:index)
     end
   end
-
 end
