@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
-
 describe ProductsController do
+
   describe '[GET] #index' do
     before do
       create_list(:product, 10)
