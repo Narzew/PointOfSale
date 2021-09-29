@@ -14,10 +14,14 @@
 <script type="text/javascript">
   function showProductsArray(productsArray){
     var s = "";
+    var productSum = 0.0;
     productsArray.forEach(function (item, index) {
       console.log(item, index);
       s = s.concat(item['productName']+" - $" + item['productPrice']+"<br/>");
+      productSum = productSum + parseFloat(item['productPrice']);
     });
+    s = s.concat("---------------------------------------------------<br/>");
+    s = s.concat("Sum: $"+productSum.toFixed(2))
     return s;
   }
 </script>
@@ -43,7 +47,7 @@
                           $(".lcd_display").html("Product not found!");
                         } else {
                           productName = r['data']['name'];
-                          productPrice = r['data']['price'];
+                          productPrice = parseFloat(r['data']['price']).toFixed(2);
                           productsArray.push({productName, productPrice})
                           $(".lcd_display").html("Scanned product: "+productName);
                           $(".printer").html(showProductsArray(productsArray));
